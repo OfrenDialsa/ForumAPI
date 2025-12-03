@@ -5,3 +5,4 @@ pnpm-workspace.yaml
 config/database/test.json
 coverage
 .env
+forum-api-webserver.pem
