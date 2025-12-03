@@ -1,6 +1,8 @@
 node_modules
 pnpm-lock.yaml
+pnpm-workspace.yaml
 .idea
 config/database/test.json
 coverage
 .env
+forum-api-webserver.pem
