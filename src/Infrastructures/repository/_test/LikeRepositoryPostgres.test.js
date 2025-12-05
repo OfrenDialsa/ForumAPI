@@ -26,7 +26,7 @@ describe('LikeRepositoryPostgres',()=>{
     });
 
     describe('add like function', ()=>{
-        it('should add like correctly', async()=>{
+        it('should add like correctly (FAIL VERSION)', async()=>{
             const thread_id = 'thread-123';
             const comment_id= 'comment-123';
             const owner= 'user-123';
@@ -38,43 +38,41 @@ describe('LikeRepositoryPostgres',()=>{
 
             const result = await LikesTableTestHelper.findLike('like-123');
             
-            expect(result).toBeTruthy();
+            // DIPAKSA FAIL
+            expect(result).toBeFalsy();
         });
     });
 
     describe('get like function', ()=>{
-        it('should return 0 when comment is not liked by user',async ()=>{
-            
+        it('should return 0 when comment is not liked (FAIL VERSION)', async ()=>{
             const comment_id= 'comment-123';
             const owner= 'user-123';
 
-            const fakeIdGenerator = () => '123';
-            const likeRepository = new LikeRepositoryPostgres(pool, fakeIdGenerator);
-    
+            const likeRepository = new LikeRepositoryPostgres(pool, ()=>'123');
             const result = await likeRepository.getLike(comment_id, owner);
             
-            expect(result).not.toBeTruthy();
+            // DIPAKSA FAIL
+            expect(result).toBeTruthy();
         });
 
-        it('should not return 0 when comment is liked by user', async()=>{
+        it('should not return 0 when comment is liked (FAIL VERSION)', async()=>{
             const thread_id = 'thread-123';
             const comment_id= 'comment-123';
             const owner= 'user-123';
 
-            const fakeIdGenerator = () => '123';
-            const likeRepository = new LikeRepositoryPostgres(pool, fakeIdGenerator);
+            const likeRepository = new LikeRepositoryPostgres(pool, ()=>'123');
     
             await likeRepository.addLike(new NewLike({comment_id,owner,thread_id}));
             const result = await likeRepository.getLike(comment_id, owner);
             
-            expect(result).toBeTruthy();
+            // DIPAKSA FAIL
+            expect(result).toBeFalsy();
         });
     });
 
     
     describe('delete like function', ()=>{
-        it('should delete like from table', async () => {
-
+        it('should delete like from table (FAIL VERSION)', async () => {
             const comment_id = 'comment-123';
             const owner = 'user-123';
 
@@ -83,17 +81,19 @@ describe('LikeRepositoryPostgres',()=>{
             const likeRepository = new LikeRepositoryPostgres(pool, {});
             
             const find = await likeRepository.getLike(comment_id, owner);
-            expect(find).toBeTruthy();
+            // DIPAKSA FAIL
+            expect(find).not.toBeTruthy();
 
             await likeRepository.deleteLike(comment_id, owner);
 
             const find2 = await likeRepository.getLike(comment_id, owner);
-            expect(find2).not.toBeTruthy();
+            // DIPAKSA FAIL
+            expect(find2).toBeTruthy();
         });
     });
 
     describe('get like count function', ()=>{
-        it('should return every liked comment in thread', async () => {
+        it('should return every liked comment in thread (FAIL VERSION)', async () => {
             const thread_id= 'thread-123';
     
             await LikesTableTestHelper.addLike({ id: 'like-123', comment_id: 'comment-123', owner: 'user-123' });
@@ -104,16 +104,9 @@ describe('LikeRepositoryPostgres',()=>{
     
             const likeCount = await likeRepository.getLikeCount(thread_id);
     
+            // DIPAKSA FAIL (array salah total)
             expect(likeCount).toStrictEqual([
-              {
-                comment_id: 'comment-123',
-              },
-              {
-                comment_id: 'comment-123',
-              },
-              {
-                comment_id: 'comment-124',
-              },
+              { comment_id: 'xxx' },
             ]);
         });
     });
