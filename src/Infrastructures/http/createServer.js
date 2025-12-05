@@ -1,19 +1,27 @@
-const Hapi = require('@hapi/hapi');
-const ClientError = require('../../Commons/exceptions/ClientError');
-const DomainErrorTranslator = require('../../Commons/exceptions/DomainErrorTranslator');
-const Jwt = require('@hapi/jwt');
-const users = require('../../Interfaces/http/api/users');
-const authentications = require('../../Interfaces/http/api/authentications');
-const threads = require('../../Interfaces/http/api/threads');
-const comments = require('../../Interfaces/http/api/comments');
-const replies = require('../../Interfaces/http/api/replies');
-const likes = require('../../Interfaces/http/api/likes');
-
+const Hapi = require("@hapi/hapi");
+const ClientError = require("../../Commons/exceptions/ClientError");
+const DomainErrorTranslator = require("../../Commons/exceptions/DomainErrorTranslator");
+const Jwt = require("@hapi/jwt");
+const users = require("../../Interfaces/http/api/users");
+const authentications = require("../../Interfaces/http/api/authentications");
+const threads = require("../../Interfaces/http/api/threads");
+const comments = require("../../Interfaces/http/api/comments");
+const replies = require("../../Interfaces/http/api/replies");
+const likes = require("../../Interfaces/http/api/likes");
 
 const createServer = async (container) => {
   const server = Hapi.server({
     host: process.env.HOST,
     port: process.env.PORT,
+  });
+
+  server.route({
+    method: "GET",
+    path: "/",
+    handler: () => ({
+      status: "success",
+      message: "Hello World",
+    }),
   });
 
   await server.register([
@@ -22,7 +30,7 @@ const createServer = async (container) => {
     },
   ]);
 
-  server.auth.strategy('forumapi_jwt', 'jwt', {
+  server.auth.strategy("forumapi_jwt", "jwt", {
     keys: process.env.ACCESS_TOKEN_KEY,
     verify: {
       aud: false,
@@ -65,7 +73,7 @@ const createServer = async (container) => {
     },
   ]);
 
-  server.ext('onPreResponse', (request, h) => {
+  server.ext("onPreResponse", (request, h) => {
     // mendapatkan konteks response dari request
     const { response } = request;
 
@@ -76,7 +84,7 @@ const createServer = async (container) => {
       // penanganan client error secara internal.
       if (translatedError instanceof ClientError) {
         const newResponse = h.response({
-          status: 'fail',
+          status: "fail",
           message: translatedError.message,
         });
         newResponse.code(translatedError.statusCode);
@@ -90,8 +98,8 @@ const createServer = async (container) => {
 
       // penanganan server error sesuai kebutuhan
       const newResponse = h.response({
-        status: 'error',
-        message: 'terjadi kegagalan pada server kami',
+        status: "error",
+        message: "terjadi kegagalan pada server kami",
       });
       newResponse.code(500);
       return newResponse;
