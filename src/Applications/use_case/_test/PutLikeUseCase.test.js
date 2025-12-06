@@ -1,3 +1,4 @@
+const pool = require('../../../Infrastructures/database/postgres/pool');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const LikesTableTestHelper = require('../../../../tests/LikesTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
@@ -6,7 +7,6 @@ const CommentRepository = require('../../../Domains/comments/CommentRepository')
 const NewLike = require('../../../Domains/likes/entities/NewLike');
 const LikeRepository = require('../../../Domains/likes/LikeRepository');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
-
 const PutLikeUseCase = require('../PutLikeUseCase');
 
 describe('PutLikeUseCase',()=>{
@@ -21,6 +21,8 @@ describe('PutLikeUseCase',()=>{
         await ThreadsTableTestHelper.cleanTable();
         await CommentsTableTestHelper.cleanTable();
         await LikesTableTestHelper.cleanTable();
+
+        await pool.end();
     });
 
     it('should orchestrating the add like action correctly',async()=>{
