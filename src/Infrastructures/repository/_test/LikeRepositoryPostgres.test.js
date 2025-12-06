@@ -23,6 +23,8 @@ describe('LikeRepositoryPostgres',()=>{
         await UsersTableTestHelper.cleanTable();
         await ThreadsTableTestHelper.cleanTable();
         await CommentsTableTestHelper.cleanTable();
+
+        await pool.end();
     });
 
     describe('add like function', ()=>{
