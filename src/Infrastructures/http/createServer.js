@@ -1,13 +1,32 @@
 const Hapi = require("@hapi/hapi");
+const Jwt = require("@hapi/jwt");
+
+let HapiSwagger;
+let Inert;
+let Vision;
+
+if (process.env.NODE_ENV !== "test") {
+  HapiSwagger = require("hapi-swagger");
+  Inert = require("@hapi/inert");
+  Vision = require("@hapi/vision");
+}
+
 const ClientError = require("../../Commons/exceptions/ClientError");
 const DomainErrorTranslator = require("../../Commons/exceptions/DomainErrorTranslator");
-const Jwt = require("@hapi/jwt");
+
 const users = require("../../Interfaces/http/api/users");
 const authentications = require("../../Interfaces/http/api/authentications");
 const threads = require("../../Interfaces/http/api/threads");
 const comments = require("../../Interfaces/http/api/comments");
 const replies = require("../../Interfaces/http/api/replies");
 const likes = require("../../Interfaces/http/api/likes");
+
+const swaggerOptions = {
+  info: {
+    title: "Forum API Documentation",
+    version: "1.0.0",
+  },
+};
 
 const createServer = async (container) => {
   const server = Hapi.server({
@@ -47,31 +66,21 @@ const createServer = async (container) => {
   });
 
   await server.register([
-    {
-      plugin: users,
-      options: { container },
-    },
-    {
-      plugin: authentications,
-      options: { container },
-    },
-    {
-      plugin: threads,
-      options: { container },
-    },
-    {
-      plugin: comments,
-      options: { container },
-    },
-    {
-      plugin: replies,
-      options: { container },
-    },
-    {
-      plugin: likes,
-      options: { container },
-    },
+    { plugin: users, options: { container } },
+    { plugin: authentications, options: { container } },
+    { plugin: threads, options: { container } },
+    { plugin: comments, options: { container } },
+    { plugin: replies, options: { container } },
+    { plugin: likes, options: { container } },
   ]);
+
+  if (process.env.NODE_ENV !== "test") {
+    await server.register([
+      { plugin: Inert },
+      { plugin: Vision },
+      { plugin: HapiSwagger, options: swaggerOptions },
+    ]);
+  }
 
   server.ext("onPreResponse", (request, h) => {
     // mendapatkan konteks response dari request
