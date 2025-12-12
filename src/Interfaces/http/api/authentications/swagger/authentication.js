@@ -11,6 +11,16 @@ const postAuthentication = {
       username: Joi.string().required().description("Username user"),
       password: Joi.string().required().description("Password user"),
     }),
+
+    failAction: (request, h, err) => {
+      return h
+        .response({
+          status: "fail",
+          message: err.message,
+        })
+        .code(400)
+        .takeover();
+    },
   },
 
   response: {

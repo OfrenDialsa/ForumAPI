@@ -10,7 +10,17 @@ const postUser = {
       username: Joi.string().required().description('Username unik'),
       password: Joi.string().required().description('Password user'),
       fullname: Joi.string().required().description('Nama lengkap user'),
-    })
+    }),
+
+    failAction: (request, h, err) => {
+      return h
+        .response({
+          status: "fail",
+          message: err.message,
+        })
+        .code(400)
+        .takeover();
+    },
   },
 
   response: {
