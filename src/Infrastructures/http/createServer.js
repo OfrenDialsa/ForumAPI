@@ -26,6 +26,7 @@ const swaggerOptions = {
     title: "Forum API Documentation by Ofren dialsa",
     version: "1.0.0",
   },
+  schemes: ['https'],
 };
 
 const createServer = async (container) => {
