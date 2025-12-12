@@ -21,12 +21,23 @@ const comments = require("../../Interfaces/http/api/comments");
 const replies = require("../../Interfaces/http/api/replies");
 const likes = require("../../Interfaces/http/api/likes");
 
+let schemes = ["https"];
+if (process.env.NODE_ENV !== "production") {
+  schemes = ["http", "https"];
+}
 const swaggerOptions = {
   info: {
     title: "Forum API Documentation by Ofren dialsa",
     version: "1.0.0",
   },
-  schemes: ['https'],
+  schemes: schemes,
+  securityDefinitions: {
+    jwt: {
+      type: "apiKey",
+      name: "Authorization",
+      in: "header",
+    },
+  },
 };
 
 const createServer = async (container) => {
@@ -87,7 +98,6 @@ const createServer = async (container) => {
     const { response } = request;
 
     if (response instanceof Error) {
-
       const translatedError = DomainErrorTranslator.translate(response);
 
       if (translatedError instanceof ClientError) {
