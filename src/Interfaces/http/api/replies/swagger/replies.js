@@ -1,18 +1,23 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
 const postAddReply = {
-  auth: 'forumapi_jwt',
-  tags: ['api', 'Replies'],
-  description: 'Menambah reply pada sebuah komentar',
-  notes: 'User harus login (JWT). Reply akan ditambahkan ke komentar tertentu.',
+  auth: "forumapi_jwt",
+  tags: ["api", "Replies"],
+  description: "Menambah reply pada sebuah komentar",
+  notes: "User harus login (JWT). Reply akan ditambahkan ke komentar tertentu.",
+  plugins: {
+    "hapi-swagger": {
+      security: [{ jwt: [] }],
+    },
+  },
 
   validate: {
     params: Joi.object({
-      thread_id: Joi.string().required().description('ID thread'),
-      comment_id: Joi.string().required().description('ID komentar'),
+      thread_id: Joi.string().required().description("ID thread"),
+      comment_id: Joi.string().required().description("ID komentar"),
     }),
     payload: Joi.object({
-      content: Joi.string().required().description('Isi reply'),
+      content: Joi.string().required().description("Isi reply"),
     }),
 
     failAction: (request, h, err) => {
@@ -28,7 +33,7 @@ const postAddReply = {
 
   response: {
     schema: Joi.object({
-      status: Joi.string().valid('success').required(),
+      status: Joi.string().valid("success").required(),
       message: Joi.string().required(),
       data: Joi.object({
         addedReply: Joi.object({
@@ -37,28 +42,35 @@ const postAddReply = {
           owner: Joi.string().required(),
         }),
       }),
-    }).label('AddReplyResponse'),
+    }).label("AddReplyResponse"),
   },
 };
 
 const deleteReply = {
-  auth: 'forumapi_jwt',
-  tags: ['api', 'Replies'],
-  description: 'Menghapus reply dari komentar',
-  notes: 'User harus login. Hanya pemilik reply yang dapat menghapus.',
+  auth: "forumapi_jwt",
+  tags: ["api", "Replies"],
+  description: "Menghapus reply dari komentar",
+  notes: "User harus login. Hanya pemilik reply yang dapat menghapus.",
+  plugins: {
+    "hapi-swagger": {
+      security: [{ jwt: [] }],
+    },
+  },
 
   validate: {
     params: Joi.object({
-      thread_id: Joi.string().required().description('ID thread'),
-      comment_id: Joi.string().required().description('ID komentar'),
-      reply_id: Joi.string().required().description('ID reply yang akan dihapus'),
+      thread_id: Joi.string().required().description("ID thread"),
+      comment_id: Joi.string().required().description("ID komentar"),
+      reply_id: Joi.string()
+        .required()
+        .description("ID reply yang akan dihapus"),
     }),
   },
 
   response: {
     schema: Joi.object({
-      status: Joi.string().valid('success').required(),
-    }).label('DeleteReplyResponse'),
+      status: Joi.string().valid("success").required(),
+    }).label("DeleteReplyResponse"),
   },
 };
 

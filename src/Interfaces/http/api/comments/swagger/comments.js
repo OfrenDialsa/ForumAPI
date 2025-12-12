@@ -6,6 +6,11 @@ const postAddComment = {
   description: "Menambah komentar pada sebuah thread",
   notes:
     "User harus login (JWT). Komentar akan ditambahkan ke thread tertentu.",
+  plugins: {
+    "hapi-swagger": {
+      security: [{ jwt: [] }],
+    },
+  },
 
   validate: {
     params: Joi.object({
@@ -46,6 +51,11 @@ const deleteComment = {
   tags: ["api", "Comments"],
   description: "Menghapus komentar dari thread",
   notes: "User harus login. Hanya pemilik komentar yang dapat menghapus.",
+  plugins: {
+    "hapi-swagger": {
+      security: [{ jwt: [] }],
+    },
+  },
 
   validate: {
     params: Joi.object({

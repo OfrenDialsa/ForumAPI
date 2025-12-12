@@ -5,6 +5,11 @@ const postAddThread = {
   tags: ["api", "Threads"],
   description: "Menambah thread baru",
   notes: "User harus login (JWT). Thread akan ditambahkan ke forum.",
+  plugins: {
+    "hapi-swagger": {
+      security: [{ jwt: [] }],
+    },
+  },
 
   validate: {
     payload: Joi.object({
