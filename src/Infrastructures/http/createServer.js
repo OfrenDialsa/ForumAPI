@@ -23,7 +23,7 @@ const likes = require("../../Interfaces/http/api/likes");
 
 const swaggerOptions = {
   info: {
-    title: "Forum API Documentation",
+    title: "Ofren Dialsa - Forum API Documentation",
     version: "1.0.0",
   },
 };
