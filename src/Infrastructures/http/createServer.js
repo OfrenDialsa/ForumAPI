@@ -86,7 +86,6 @@ const createServer = async (container) => {
     const { response } = request;
 
     if (response instanceof Error) {
-      console.error(response); // <-- tambahkan ini agar error asli muncul
 
       const translatedError = DomainErrorTranslator.translate(response);
 

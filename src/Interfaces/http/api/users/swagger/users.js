@@ -10,7 +10,7 @@ const postUser = {
       username: Joi.string().required().description('Username unik'),
       password: Joi.string().required().description('Password user'),
       fullname: Joi.string().required().description('Nama lengkap user'),
-    }),
+    })
   },
 
   response: {

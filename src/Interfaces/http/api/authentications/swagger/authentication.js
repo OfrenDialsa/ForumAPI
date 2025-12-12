@@ -3,8 +3,9 @@ const Joi = require("joi");
 const postAuthentication = {
   tags: ["api", "Authentications"],
   description: "Membuat authentication baru (login)",
-  notes: "User mengirimkan username dan password, akan dikembalikan accessToken & refreshToken",
-  
+  notes:
+    "User mengirimkan username dan password, akan dikembalikan accessToken & refreshToken",
+
   validate: {
     payload: Joi.object({
       username: Joi.string().required().description("Username user"),
@@ -14,8 +15,11 @@ const postAuthentication = {
 
   response: {
     schema: Joi.object({
-      accessToken: Joi.string().required(),
-      refreshToken: Joi.string().required(),
+      status: Joi.string().valid("success").required(),
+      data: Joi.object({
+        accessToken: Joi.string().required(),
+        refreshToken: Joi.string().required(),
+      }).required(),
     }).label("PostAuthenticationResponse"),
   },
 };
@@ -23,17 +27,23 @@ const postAuthentication = {
 const putAuthentication = {
   tags: ["api", "Authentications"],
   description: "Memperbarui access token menggunakan refresh token",
-  notes: "User mengirimkan refreshToken yang valid, akan dikembalikan accessToken baru",
-  
+  notes:
+    "User mengirimkan refreshToken yang valid, akan dikembalikan accessToken baru",
+
   validate: {
     payload: Joi.object({
-      refreshToken: Joi.string().required().description("Refresh token yang valid"),
+      refreshToken: Joi.string()
+        .required()
+        .description("Refresh token yang valid"),
     }),
   },
 
   response: {
     schema: Joi.object({
-      accessToken: Joi.string().required(),
+      status: Joi.string().valid("success").required(),
+      data: Joi.object({
+        accessToken: Joi.string().required(),
+      }).required(),
     }).label("PutAuthenticationResponse"),
   },
 };
@@ -42,10 +52,12 @@ const deleteAuthentication = {
   tags: ["api", "Authentications"],
   description: "Menghapus refresh token (logout)",
   notes: "User mengirimkan refreshToken yang ingin dihapus",
-  
+
   validate: {
     payload: Joi.object({
-      refreshToken: Joi.string().required().description("Refresh token yang ingin dihapus"),
+      refreshToken: Joi.string()
+        .required()
+        .description("Refresh token yang ingin dihapus"),
     }),
   },
 
