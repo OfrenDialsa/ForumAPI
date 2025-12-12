@@ -11,6 +11,16 @@ const putCommentLike = {
       thread_id: Joi.string().required().description('ID thread'),
       comment_id: Joi.string().required().description('ID komentar'),
     }),
+
+    failAction: (request, h, err) => {
+      return h
+        .response({
+          status: "fail",
+          message: err.message,
+        })
+        .code(400)
+        .takeover();
+    },
   },
 
   response: {

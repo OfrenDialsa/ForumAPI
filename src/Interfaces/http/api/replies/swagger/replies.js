@@ -14,11 +14,22 @@ const postAddReply = {
     payload: Joi.object({
       content: Joi.string().required().description('Isi reply'),
     }),
+
+    failAction: (request, h, err) => {
+      return h
+        .response({
+          status: "fail",
+          message: err.message,
+        })
+        .code(400)
+        .takeover();
+    },
   },
 
   response: {
     schema: Joi.object({
       status: Joi.string().valid('success').required(),
+      message: Joi.string().required(),
       data: Joi.object({
         addedReply: Joi.object({
           id: Joi.string().required(),
