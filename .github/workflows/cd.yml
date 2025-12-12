@@ -20,6 +20,6 @@ jobs:
         script: |
           cd ~/ForumAPI
           git pull origin main
-          npm install
-          npm run migrate up
+          pnpm install
+          pnpm migrate up
           pm2 restart forum-api
